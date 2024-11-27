@@ -14,8 +14,9 @@ async def ws_client(name: str):
                 break
 
             await ws.send(msg)
+            print(f"Eu: {msg}")
             res = await ws.recv()
-            print(f"{name}: {res}")
+            print(f"Outro: {res}")
 
 if __name__ == "__main__":
     name = input("Enter your name: ")
