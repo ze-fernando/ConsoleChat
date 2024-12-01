@@ -9,7 +9,7 @@ var connection = new HubConnectionBuilder()
 
 connection.On<string, string>("ReceiveMessage", (user, message) =>
 {
-    Console.WriteLine($"\n{user}: {message}");
+    Console.WriteLine($"\n{user}:{message}");
 });
 
 try
@@ -26,25 +26,27 @@ catch (Exception ex)
 Console.Write("Digite seu nome: ");
 string? user = Console.ReadLine();
 
+
+Console.Write("Digite o nome da room: ");
+string? room = Console.ReadLine();
+
+
+Console.WriteLine("Digite 'quit' para sair a qualquer instante");
+await connection.InvokeAsync("AddRoom", room);
+
 while (true)
 {
-    // Console.Write("Message: ");
     string? message = Console.ReadLine();
 
-
-    if (string.IsNullOrEmpty(message))
+    if (message?.ToLower() == "quit")
+    {
+        await connection.InvokeAsync("LeftRoom", room);
         break;
-
-    try
-    {
-        await connection.InvokeAsync("SendMessage", user, message);
     }
-    catch (Exception ex)
-    {
 
-        Console.WriteLine($"Erro ao conectar ao servidor {ex.Message}");
-        return;
-    }
+    if (string.IsNullOrEmpty(message)) break;
+
+    await connection.InvokeAsync("SendMessage", user, room, message);
 }
 
 Console.WriteLine("\nDesconectando...");
