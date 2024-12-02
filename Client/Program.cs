@@ -46,7 +46,7 @@ while (true)
 
     if (string.IsNullOrEmpty(message)) break;
 
-    await connection.InvokeAsync("SendMessage", user, room, message);
+    await connection.InvokeAsync("SendMessage", room, user, message);
 }
 
 Console.WriteLine("\nDesconectando...");
