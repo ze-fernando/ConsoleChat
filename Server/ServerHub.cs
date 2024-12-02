@@ -7,15 +7,15 @@ public class ServerHub : Hub
         await Clients.Group(room).SendAsync("ReceiveMessage", user, message);
     }
 
-    public async Task AddRoom(string room)
+    public async Task AddRoom(string room, string user)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, room);
-        await Clients.Group(room).SendAsync("ReceiveMessage", "Server", $"{Context.ConnectionId} entrou na sala {room}");
+        await Clients.Group(room).SendAsync("ReceiveMessage", "Server: ", $"{user} entrou na sala {room}");
     }
 
-    public async Task LeftRoom(string room)
+    public async Task LeftRoom(string room, string user)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, room);
-        await Clients.Group(room).SendAsync("ReceiveMessage", "Server", $"{Context.ConnectionId} saiu da sala {room}");
+        await Clients.Group(room).SendAsync("ReceiveMessage", "Server: ", $"{user} saiu da sala {room}");
     }
 }

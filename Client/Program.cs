@@ -9,7 +9,7 @@ var connection = new HubConnectionBuilder()
 
 connection.On<string, string>("ReceiveMessage", (user, message) =>
 {
-    Console.WriteLine($"\n{user}:{message}");
+    Console.WriteLine($"{user}: {message}");
 });
 
 try
@@ -32,7 +32,7 @@ string? room = Console.ReadLine();
 
 
 Console.WriteLine("Digite 'quit' para sair a qualquer instante");
-await connection.InvokeAsync("AddRoom", room);
+await connection.InvokeAsync("AddRoom", room, user);
 
 while (true)
 {
@@ -40,7 +40,7 @@ while (true)
 
     if (message?.ToLower() == "quit")
     {
-        await connection.InvokeAsync("LeftRoom", room);
+        await connection.InvokeAsync("LeftRoom", room, user);
         break;
     }
 
